@@ -1,6 +1,8 @@
 package co.edu.ucompensar.web2.modelo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+
 
 @Entity
 @Table(name = "usuarios")
@@ -10,31 +12,36 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 20)
+    @JsonProperty("documento")
+    @Column (unique = true, nullable = false, length = 20)
     private String documento;
 
-    @Column(nullable = false, length = 100)
-    private String nombre;
+    @JsonProperty("nombres")
+    @Column(nullable = false, length = 20, name = "nombres")
+    private String nombres;
 
-    @Column(nullable = false,length = 100)
-    private String apellido;
+    @JsonProperty("apellidos")
+    @Column(nullable = false, length = 20, name = "apellidos")
+    private String apellidos;
 
-    @Column(nullable = false,length = 100)
+    @JsonProperty("email")
+    @Column(unique = true, nullable = false, length = 50)
     private String email;
 
-    @Column(nullable = false, length =20 )
+    @JsonProperty("password")
+    @Column(nullable = false, length = 20)
     private String password;
 
     public Usuario() {
     }
 
-    public Usuario(Long id, String documento, String nombre, String apellido, String email, String pasword) {
+    public Usuario(Long id, String documento, String nombre, String apellido, String email, String password) {
         this.id = id;
         this.documento = documento;
-        this.nombre = nombre;
-        this.apellido = apellido;
+        this.nombres = nombre;
+        this.apellidos = apellido;
         this.email = email;
-        this.password = pasword;
+        this.password = password;
     }
 
     public Long getId() {
@@ -54,19 +61,19 @@ public class Usuario {
     }
 
     public String getNombre() {
-        return nombre;
+        return nombres;
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombres = nombre;
     }
 
     public String getApellido() {
-        return apellido;
+        return apellidos;
     }
 
     public void setApellido(String apellido) {
-        this.apellido = apellido;
+        this.apellidos = apellido;
     }
 
     public String getEmail() {
@@ -81,7 +88,7 @@ public class Usuario {
         return password;
     }
 
-    public void setPassword(String pasword) {
-        this.password = pasword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
