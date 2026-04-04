@@ -3,13 +3,20 @@ package co.edu.ucompensar.web2.service;
 import co.edu.ucompensar.web2.Exception.ProductoNotFoundException;
 import co.edu.ucompensar.web2.modelo.Producto;
 import co.edu.ucompensar.web2.repository.ProductoRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductoServiceImpl implements Productoservice {
 
     private ProductoRepository productoRepository;
 
+    public ProductoServiceImpl(ProductoRepository productoRepository) {
+        this.productoRepository = productoRepository;
+    }
+
+    @Override
     public Producto crear(Producto producto) {
         if (producto.getNombre() == null) {
             throw new IllegalArgumentException("El nombre no puede ser nulo");
@@ -24,22 +31,31 @@ public class ProductoServiceImpl implements Productoservice {
         return productoRepository.save(producto) ;
     }
 
+    @Override
     public Producto obtener(Long id){
 
         return productoRepository.findById(id).orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado" + id));
     }
-
+    @Override
     public List<Producto> listar(){
         return productoRepository.findAll();
     };
-
+    @Override
     public Producto actualizar(Long id, Producto producto){
-        Producto existente = productoRepository.findById(id).orElse(null);
+        Producto existente = productoRepository.findById(id).orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado" + id));
         existente.setNombre(producto.getNombre());
+        existente.setDescripcion(producto.getDescripcion());
+        existente.setPrecio(producto.getPrecio());
+        existente.setStock(producto.getStock());
+        existente.setCategoria(producto.getCategoria());
+        existente.setActivo(producto.getActivo());
         return productoRepository.save(existente);
     }
-    public void borrar(Long id){
-
+    @Override
+    public void borrar(Long id) {
+        if (!productoRepository.existsById(id)) {
+            throw new ProductoNotFoundException(String.valueOf(id));
+        }
         productoRepository.deleteById(id);
     }
 

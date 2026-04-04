@@ -105,11 +105,11 @@ public class ProductoServiceImplTest {
     }
     @Test
     void testObtenerPorId_noExiste(){
-        when(productoRepository.findById(producto.getId())).thenReturn(Optional.empty());
+        when(productoRepository.findById(99L)).thenReturn(Optional.empty());
         assertThrows(ProductoNotFoundException.class, ()->{
-            productoServiceImpl.obtener(producto.getId());
+            productoServiceImpl.obtener(99L);
         });
-        verify(productoRepository).findById(producto.getId());
+        verify(productoRepository).findById(99L);
     }
 
     @Test
@@ -170,12 +170,44 @@ public class ProductoServiceImplTest {
 
     }
     @Test
+    void testActualizar_noExiste(){
+        Producto producto2 = new Producto();
+        producto2.setNombre("Laptop hp");
+        producto2.setPrecio(150000.0);
+        producto2.setStock(20);
+        producto2.setCategoria("electronica 2");
+        producto2.setActivo(false);
+
+        when(productoRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(ProductoNotFoundException.class, ()-> {
+            productoServiceImpl.actualizar(99L, producto2);
+        });
+
+    }
+    @Test
     void testBorrar_exitoso() {
+        when(productoRepository.existsById(producto.getId())).thenReturn(true);
         doNothing().when(productoRepository).deleteById(producto.getId());
         productoServiceImpl.borrar(producto.getId());
-        verify(productoRepository,times(1)).deleteById(producto.getId());
+        verify(productoRepository).deleteById(producto.getId());
+    }
+    @Test
+    void testEliminar_noExiste_noLlamaDelete(){
+        when(productoRepository.existsById(producto.getId())).thenReturn(false);
+        assertThrows(ProductoNotFoundException.class, () -> {
+            productoServiceImpl.borrar(producto.getId());
+        });
+        verify(productoRepository, never()).deleteById(any());
+    }
+    @Test
+    void testEliminar_noExiste(){
 
+        when(productoRepository.existsById(99L)).thenReturn(false);
 
+        assertThrows(ProductoNotFoundException.class,
+                () -> productoServiceImpl.borrar(99L));
+
+        verify(productoRepository, never()).deleteById(99L);
     }
 
 
