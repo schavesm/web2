@@ -10,6 +10,15 @@ public class ProductoServiceImpl implements Productoservice {
     private ProductoRepository productoRepository;
 
     public Producto crear(Producto producto) {
+        if (producto.getNombre() == null) {
+            throw new IllegalArgumentException("El nombre no puede ser nulo");
+        }
+        if (producto.getPrecio() < 0){
+            throw new IllegalArgumentException("El valor del producto no puede ser menor a 0");
+        }
+        if (producto.getStock() < 0){
+            throw new IllegalArgumentException("El numero de stock no puede ser menor a 0");
+        }
 
         return productoRepository.save(producto) ;
     }
