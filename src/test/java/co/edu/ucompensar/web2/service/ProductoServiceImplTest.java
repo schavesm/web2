@@ -1,5 +1,6 @@
 package co.edu.ucompensar.web2.service;
 
+import co.edu.ucompensar.web2.Exception.ProductoNotFoundException;
 import co.edu.ucompensar.web2.modelo.Producto;
 import co.edu.ucompensar.web2.repository.ProductoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -102,6 +103,25 @@ public class ProductoServiceImplTest {
         verify(productoRepository,times(1)).findById((producto.getId()));
 
     }
+    @Test
+    void testObtenerPorId_noExiste(){
+        when(productoRepository.findById(producto.getId())).thenReturn(Optional.empty());
+        assertThrows(ProductoNotFoundException.class, ()->{
+            productoServiceImpl.obtener(producto.getId());
+        });
+        verify(productoRepository).findById(producto.getId());
+    }
+
+    @Test
+    void testObtenerPorId_mensajeError(){
+        when(productoRepository.findById(producto.getId())).thenReturn(Optional.empty());
+        ProductoNotFoundException exception = assertThrows(
+                ProductoNotFoundException.class,
+                () -> productoServiceImpl.obtener(producto.getId())
+        );
+
+        assertTrue(exception.getMessage().contains("1"));
+    }
 
     @Test
     void testListar_exitoso(){
@@ -117,6 +137,15 @@ public class ProductoServiceImplTest {
         assertEquals(true,result.get(0).getActivo());
         assertFalse(result.isEmpty());
         verify(productoRepository, times(1)).findAll();
+    }
+    @Test
+    void testObtenerTodos_listaVacia(){
+        when(productoRepository.findAll()).thenReturn(List.of());
+        List<Producto> result = productoServiceImpl.listar();
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(productoRepository).findAll();
+
     }
 
     @Test

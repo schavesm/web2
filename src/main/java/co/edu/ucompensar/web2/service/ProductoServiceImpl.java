@@ -1,5 +1,6 @@
 package co.edu.ucompensar.web2.service;
 
+import co.edu.ucompensar.web2.Exception.ProductoNotFoundException;
 import co.edu.ucompensar.web2.modelo.Producto;
 import co.edu.ucompensar.web2.repository.ProductoRepository;
 
@@ -25,7 +26,7 @@ public class ProductoServiceImpl implements Productoservice {
 
     public Producto obtener(Long id){
 
-        return productoRepository.findById(id).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        return productoRepository.findById(id).orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado" + id));
     }
 
     public List<Producto> listar(){
