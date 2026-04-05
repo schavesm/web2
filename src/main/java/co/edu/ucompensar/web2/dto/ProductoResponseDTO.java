@@ -1,30 +1,32 @@
 package co.edu.ucompensar.web2.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+public class ProductoResponseDTO {
 
-public class ProductoRequestDTO {
-
-    @NotBlank(message = "El nombre es obligatorio")
-    @Size(max = 150, message = "El nombre no puede tener más de 150 caracteres")
+    private Long id;
     private String nombre;
-
-    @NotBlank(message = "La descripción es obligatoria")
-    @Size(max = 500, message = "La descripción no puede tener más de 500 caracteres")
     private String descripcion;
-
-    @NotBlank(message = "El precio es obligatorio")
     private Double precio;
-
-    @NotBlank(message = "El stock es obligatorio")
     private Integer stock;
-
-    @NotBlank(message = "La categoría es obligatoria")
-    @Size(max = 100, message = "La categoría no puede tener más de 100 caracteres")
     private String categoria;
-
-    @NotBlank(message = "El estado activo es obligatorio")
     private Boolean activo;
+
+    public ProductoResponseDTO(Long id, String nombre, String descripcion, Double precio, Integer stock, String categoria, Boolean activo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.stock = stock;
+        this.categoria = categoria;
+        this.activo = activo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;

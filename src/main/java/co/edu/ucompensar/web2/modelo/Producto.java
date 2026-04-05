@@ -2,6 +2,7 @@ package co.edu.ucompensar.web2.modelo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "productos")
@@ -13,18 +14,22 @@ public class Producto {
 
     @JsonProperty("nombre")
     @Column(nullable = false, length = 150)
+    @NotBlank(message = "El nombre no puede estar vacío")
     private String nombre;
 
     @JsonProperty("descripcion")
     @Column(nullable = false, length = 500)
+    @NotBlank(message = "La descripción no puede estar vacía")
     private String descripcion;
 
     @JsonProperty("precio")
     @Column(nullable = false)
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor a 0")
     private Double precio;
 
     @JsonProperty("stock")
     @Column(nullable = false)
+    @Min(value = 0, message = "El stock no puede ser negativo")
     private Integer stock;
 
     @JsonProperty("categoria")

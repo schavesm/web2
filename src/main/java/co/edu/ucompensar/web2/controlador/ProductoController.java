@@ -3,6 +3,7 @@ package co.edu.ucompensar.web2.controlador;
 import co.edu.ucompensar.web2.modelo.Producto;
 import co.edu.ucompensar.web2.modelo.Usuario;
 import co.edu.ucompensar.web2.service.Productoservice;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<Producto> crear(@RequestBody Producto producto) {
+    public ResponseEntity<Producto> crear(@Valid @RequestBody Producto producto) {
 
         Producto creado = productoservice.crear(producto);
         return ResponseEntity
