@@ -11,6 +11,7 @@ public interface Productoservice {
     List<Producto> listar();
     Producto actualizar(Long id, Producto producto);
     void borrar (Long id);
+    List<Producto> buscarPorCategoria(String categoria);
 
 
 }

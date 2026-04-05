@@ -58,6 +58,13 @@ public class ProductoServiceImpl implements Productoservice {
         }
         productoRepository.deleteById(id);
     }
+    @Override
+    public List<Producto> buscarPorCategoria(String categoria) {
+        if (categoria == null || categoria.trim().isEmpty()) {
+            throw new IllegalArgumentException("La categoría no puede estar vacía");
+        }
+        return productoRepository.findByCategoria(categoria);
+    }
 
 
 

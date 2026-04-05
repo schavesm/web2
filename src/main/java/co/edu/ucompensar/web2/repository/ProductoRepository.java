@@ -4,6 +4,8 @@ import co.edu.ucompensar.web2.modelo.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto,Long> {
 
@@ -15,5 +17,7 @@ public interface ProductoRepository extends JpaRepository<Producto,Long> {
     //  existsById(id)          → EXISTS por ID
     //  count()                 → COUNT total
     // ──────────────────────────────────────────────────
+
+    List<Producto> findByCategoria(String categoria);
 
 }

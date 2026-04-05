@@ -211,4 +211,108 @@ public class ProductoServiceImplTest {
     }
 
 
+
+    @Test
+    void testBuscarPorCategoria_exitoso() {
+        Producto producto2 = new Producto();
+        producto2.setId(2L);
+        producto2.setNombre("Monitor Samsung");
+        producto2.setDescripcion("Monitor 24\"");
+        producto2.setPrecio(600000.0);
+        producto2.setStock(5);
+        producto2.setCategoria("Electronica");
+        producto2.setActivo(true);
+
+        List<Producto> productosEnCategoria = List.of(producto, producto2);
+
+        when(productoRepository.findByCategoria("Electronica"))
+                .thenReturn(productosEnCategoria);
+
+        List<Producto> result = productoServiceImpl.buscarPorCategoria("Electronica");
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Electronica", result.get(0).getCategoria());
+        assertEquals("Electronica", result.get(1).getCategoria());
+        verify(productoRepository, times(1)).findByCategoria("Electronica");
+    }
+
+    @Test
+    void testBuscarPorCategoria_categoriaNula() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            productoServiceImpl.buscarPorCategoria(null);
+        });
+
+        verify(productoRepository, never()).findByCategoria(any());
+    }
+
+    @Test
+    void testBuscarPorCategoria_categoriaVacia() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            productoServiceImpl.buscarPorCategoria("");
+        });
+
+        verify(productoRepository, never()).findByCategoria(any());
+    }
+
+    @Test
+    void testBuscarPorCategoria_categoriaSoloEspacios() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            productoServiceImpl.buscarPorCategoria("   ");
+        });
+
+        verify(productoRepository, never()).findByCategoria(any());
+    }
+
+    @Test
+    void testBuscarPorCategoria_sinResultados() {
+        when(productoRepository.findByCategoria("NoExiste"))
+                .thenReturn(List.of());
+
+        List<Producto> result = productoServiceImpl.buscarPorCategoria("NoExiste");
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(productoRepository, times(1)).findByCategoria("NoExiste");
+    }
+
+    @Test
+    void testBuscarPorCategoria_unResultado() {
+        when(productoRepository.findByCategoria("Electronica"))
+                .thenReturn(List.of(producto));
+
+        List<Producto> result = productoServiceImpl.buscarPorCategoria("Electronica");
+
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(1L, result.get(0).getId());
+        assertEquals("Laptop dell", result.get(0).getNombre());
+        assertEquals("Electronica", result.get(0).getCategoria());
+        verify(productoRepository, times(1)).findByCategoria("Electronica");
+    }
+    @Test
+    void testConstructorProducto() {
+
+        Long id = 1L;
+        String nombre = "Laptop";
+        String descripcion = "Laptop gamer";
+        Double precio = 3500.0;
+        Integer stock = 10;
+        String categoria = "Tecnologia";
+        Boolean activo = true;
+
+        Producto producto = new Producto(
+                id, nombre, descripcion, precio, stock, categoria, activo
+        );
+
+        assertEquals(id, producto.getId());
+        assertEquals(nombre, producto.getNombre());
+        assertEquals(descripcion, producto.getDescripcion());
+        assertEquals(precio, producto.getPrecio());
+        assertEquals(stock, producto.getStock());
+        assertEquals(categoria, producto.getCategoria());
+        assertEquals(activo, producto.getActivo());
+    }
+
 }

@@ -58,4 +58,11 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<List<Producto>> buscarPorCategoria(
+            @PathVariable String categoria) {
+
+        return ResponseEntity.ok(productoservice.buscarPorCategoria(categoria));
+    }
+
 }
